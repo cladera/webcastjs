@@ -74,7 +74,9 @@ _V_.Webcast = _V_.Component.extend({
         attrs = _V_.merge({
             className: this.buildCSSClass(),
             innerHTML:''
-        }, attrs); 
+        }, attrs);
+        //Add a background image
+        this.el.style.background-color = "#ff0000";
         return this._super(type, attrs);
     },
     addCuepoint : function(type, start, end, opts){
