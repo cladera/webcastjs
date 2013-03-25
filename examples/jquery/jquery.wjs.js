@@ -8,9 +8,10 @@
         var o = {};
         o.video = $.extend($.fn.wjs.defaults.video, options.video);
         o.slides = $.extend($.fn.wjs.defaults.slides, options.slides);
+        o.textPanel = $.extend($.fn.wjs.defaults.textPanel, options.textPanel);
         o.background = $.extend($.fn.wjs.defaults.background, options.background);
-        return this.each(function(){
-            var e = $(this),
+        //return this.each(function(){
+            var e = $('#idcast'),
             id = (e.attr("id") != undefined)?e.attr("id"):"wjs",
             v = $("<video></video>");
             //Create video element
@@ -36,7 +37,13 @@
                         this.addEvent("webcastReady", function (e){
                             var webcast = this.webcast;
                             var cps = {};
-                            webcast.addCuepoint("slideshow",0,10,{
+                            webcast.addCuepoint("textPanel",0,5,{
+                                id: "text0",
+                                src: "",
+                                title: "Titol1",
+                                text: "Text del seg. 0 al 5"
+                            }); 
+                            webcast.addCuepoint("slideshow",2,10,{
                                 id: "slide0",
                                 src: "http://css3.bradshawenterprises.com/images/Stones.jpg"
                             });
@@ -51,7 +58,7 @@
             }else {
                 throw new Error("wjs: Video.js library is not included.");
             }
-        });
+        //});
     }
     $.fn.wjs.instances = [];
     $.fn.wjs.defaults = {

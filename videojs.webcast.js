@@ -266,9 +266,115 @@ _V_.Slideshow.options = {
 	width: 400,
 	height: 300
 };
+
+
+/**
+* Slideshow sync compnent definition
+*/
+_V_.TextPanel = _V_.SyncComponent.extend({
+    init: function (player, options){
+        //Set options
+        var opts = player.options.webcast.TextPanel || {};
+        _V_.merge(opts, _V_.TextPanel.options); //Copy defaults
+        _V_.merge(opts, options); //Override/extend with options from constructor
+        //Call super constructor
+        this._super(player, opts);
+        this.setSize(this.options.width, this.options.height);
+        this.zoom = false;
+    },
+    buildCSSClass: function(){
+        return this._super() +  "wjs-textPanel";
+    },
+    createElement: function(type, attrs){
+        attrs = _V_.merge({
+            className: this.buildCSSClass()
+        }, attrs); 
+      
+        return this._super(type, attrs);
+    },
+    onClick: function () {
+        /*if(this.zoom){
+            this.setSize(this.options.width, this.options.height);
+            this.removeClass("zoom");
+            this.zoom = false;
+            
+        }else {
+            this.setSize("","","");
+            this.addClass("zoom-in");
+            this.zoom = true;
+        }
+        this.triggerEvent("zoomchange");*/
+    },
+    setup: function (c) {
+        this.createPanel(c.opts.id, c.opts.title, c.opts.text);        
+    },
+    start : function (c){
+        this._super(c);
+        this.showPanel(c.opts.id);
+        
+    },
+    end: function(c){
+        this._super(c);
+        this.hidePanel(c.opts.id);
+    },
+    getPanel: function (id) {
+        return this.el.querySelector("div#"+id);
+    },
+    createPanel: function (id, title, text) {
+        console.log("Setting panel");
+        var self = this;
+        var s = _V_.createElement("div", {
+            id: id,
+            src: "",
+            className: "wjs-panel"
+        });
+        s.style.width = this.options.width+"px";
+        s.style["max-height"] = "100%";
+        s.style.opacity = 0;
+        s.style.visibility = "hidden";
+        s.style.position = "absolute";
+        this.addEvent("zoomchange", function(){
+            
+            /*if(this.zoom){
+                s.style.width = "";
+            }else {
+                s.style.width = this.options.width+"px";
+            }*/
+        });
+        //s.appendChild("<h2>"+title+"</h2><br /><p>"+text+"</p>");
+        console.log(s);
+        s.innerHTML="<h2>"+title+"</h2><br /><p>"+text+"</p>";
+        this.el.appendChild(s);
+         
+        //s=$("#"+id);
+        //$("#"+id).innerHTML();
+    },
+    hidePanel: function (id) {
+        console.log("Hidding text");
+        var s = this.getPanel(id);
+        _V_.removeClass(s, "vjs-fade-in");
+        _V_.addClass(s, "vjs-fade-out");
+    },
+    showPanel: function (id){
+        console.log("Showing text");
+        var s = this.getPanel(id);
+        _V_.removeClass(s, "vjs-fade-out");
+        _V_.addClass(s, "vjs-fade-in");
+    }
+});
+_V_.TextPanel.options = {
+    cuepointfilter : "textPanel",
+    width: 400,
+    height: 300
+};
+
+
 //Enable Webcast component
 _V_.options.components.webcast = {
 	components: {}
 };
 //Enable slideshow component
 _V_.options.components.webcast.components.slideshow = {};
+
+//Enable textPanel component
+_V_.options.components.webcast.components.textPanel = {};

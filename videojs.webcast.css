@@ -1,6 +1,8 @@
 .webcast-js {
 	padding: 10px;
-	position: absolute;
+	position: relative;
+	width: 1200px;
+	height: 400px;
 	top:0; right: 0; bottom: 0; left: 0;
 	background: #3b3939 url(https://s3.amazonaws.com/wscontents-us1/2/6/613551413721721/assets/353/html5_background_land.jpg) repeat-x;
 }
@@ -9,6 +11,9 @@
 }
 .webcast-js .wjs-slideshow {
 	float:right;
+}
+.webcast-js .wjs-panel {
+	color:white;
 }
 .webcast-js .wjs-slideshow .wjs-slide {
 	 /* CSS Shadows */
