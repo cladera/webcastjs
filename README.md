@@ -27,7 +27,7 @@ with the timeline:
 		videojs("myVideo").ready(function(){
 			this.cuepoints();
 			this.addCuepoint({
-				namespace: "logger",
+				id: "1",
 				start: 0,
 				end: 30,
 				onStart: function(params){
@@ -44,6 +44,10 @@ with the timeline:
 			});
 		});
 	</script>
+
+### Seeking
+To seek to the start of a specific cuepoint call `seekCuepoint` passing in the id.
+  videojsObject.seekCuepoint(1);
 	
 ##Please, fork me!
 I have a lot of things to learn yet (one of them is my English). So, fork me and help me to improve

@@ -1,52 +1,39 @@
+/*global module:false*/
 module.exports = function(grunt) {
-	var pkg, version, verParts;
-	pkg = grunt.file.readJSON('package.json');
-  	verParts = pkg.version.split('.');
-	version = {
-		full: pkg.version,
-	    major: verParts[0],
-	    minor: verParts[1],
-	    patch: verParts[2]
-	};
-  	version.majorMinor = version.major + '.' + version.minor;
+
   // Project configuration.
   grunt.initConfig({
-    pkg: pkg,
-    jshint: {
-      src: {
-        src: ['src/*.js'],
-        options: {
-        	jshintrc: '.jshintrc'
+    // Metadata.
+    pkg: grunt.file.readJSON('package.json'),
+    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+      ' Licensed <%= pkg.license %> */\n',
+    // Task configuration.
+    coffee: {
+      compile: {
+        files: {
+          'dist/<%= pkg.name %>.js': 'src/<%= pkg.name %>.coffee'
         }
       }
     },
-    concat: {
-    	build: {
-    		src: ['src/cuepoint.js','src/core.js'],
-    		dest:'build/<%= pkg.name %>.js'
-    	}
-    },
     uglify: {
       options: {
-        banner: '/*! <%= pkg.title %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'+
-        		'/*! Author: <%= pkg.author_name %> <<%= pkg.author_email %>>*/\n'
-      },
-      build: {
-        src: 'build/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.distName %>.js'
+        banner: '<%= banner %>'
       },
       dist: {
-      	src: 'build/<%= pkg.name %>.js',
-        dest: 'dist/<%= pkg.distName %>.js'
+        src: 'dist/<%= pkg.name %>.js',
+        dest: 'dist/<%= pkg.name %>.min.js'
       }
-    }
+    },
   });
 
-  // Load the plugin that provides the "uglify" task.
+  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  // Default task(s).
-  grunt.registerTask('default', ['jshint', 'concat','uglify']);
-  grunt.registerTask('dist',['jshint', 'concat','uglify:dist']);
+
+  // Default task.
+  grunt.registerTask('default', ['coffee', 'uglify']);
+
 };
